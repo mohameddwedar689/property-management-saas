@@ -18,11 +18,13 @@ const authenticate = (req, res, next) => {
 };
 
 // Optional middleware to check role
-const authorize = (role) => (req, res, next) => {
-    if (req.user.role !== role)
-        return res.status(403).json({ message: 'Access forbidden: insufficient permissions' });
-
-    next();
+const authorize = (role) => {
+    return (req, res, next) => {
+        if (req.user.role !== role) {
+            return res.status(403).json({ message: 'Access denied: role mismatch' });
+        }
+        next();
+    };
 };
 
 module.exports = { authenticate, authorize };
